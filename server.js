@@ -1,24 +1,13 @@
 const express = require('express');
 const path = require('path');
-const favicon = require('serve-favicon');
-const app = express();
 
-const forceSSL = function () {
-  return function (req, res, next) {
-    if (req.headers['x-forwarded-proto'] !== 'https') {
-      return res.redirect(
-        ['https://', req.get('Host'), req.url].join('')
-      );
-    }
-    next();
-  }
-};
-app.use(express.static('./dist/basic-angular-with-database'));
+const app = express();
+app.use(express.static('./dist/basic-angular-with-database.json'));
 
 app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, '/dist/basic-angular-with-database/index.html'));
+  res.sendFile('index.html', {
+    root: 'dist/basic-angular-with-database.json/'
+  });
 });
-
-app.use(forceSSL());
 
 app.listen(process.env.PORT || 8080);
